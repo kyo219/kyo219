@@ -1,18 +1,23 @@
 <div align="center">
 
-# Hi, I'm kyo219 👋
-
-Building ML tools and cozy virtual spaces.
+![Hi, I'm kyo219 — Building ML tools and cozy virtual spaces.](assets/header.svg)
 
 </div>
 
 ## 🛠️ Projects
 
-**[MokuMoku Town](https://mokumoku.town/en/)** 🏙️<br>
-A virtual office in your browser. _Loosely connected, deeply focused._
-
-**[LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE)** 🌲<br>
-A regime-switching / Mixture-of-Experts extension of LightGBM.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h3 align="center"><a href="https://mokumoku.town/en/">MokuMoku Town</a> 🏙️</h3>
+      <p align="center">A virtual office in your browser.<br><em>Loosely connected, deeply focused.</em></p>
+    </td>
+    <td width="50%" valign="top">
+      <h3 align="center"><a href="https://github.com/kyo219/LightGBM-MoE">LightGBM-MoE</a> 🌲</h3>
+      <p align="center">A regime-switching / Mixture-of-Experts<br>extension of LightGBM.</p>
+    </td>
+  </tr>
+</table>
 
 ## 🌱 OSS Contributions
 
