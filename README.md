@@ -24,3 +24,13 @@ A regime-switching / Mixture-of-Experts extension of LightGBM.
 [![numpyro](https://img.shields.io/badge/numpyro-PR%20under%20review-blue?logo=github)](https://github.com/pyro-ppl/numpyro/pulls?q=is%3Apr%20author%3Akyo219)
 - [#2222](https://github.com/pyro-ppl/numpyro/pull/2222) — Avoid unnecessary deepcopy in `random_*_module` and `promote_batch_shape` _(under review)_
 <!-- OSS-CONTRIB:END -->
+
+## ⚡ Tools
+
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![R](https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white)
+![Stan](https://img.shields.io/badge/Stan-B2011D)
+![BUGS](https://img.shields.io/badge/BUGS-555555)
+![zsh](https://img.shields.io/badge/zsh-F15A24?logo=zsh&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-a%20little%20bit-lightgrey?logo=flutter&logoColor=02569B)
+![Swift](https://img.shields.io/badge/Swift-a%20little%20bit-lightgrey?logo=swift&logoColor=F05138)
