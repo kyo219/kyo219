@@ -1,5 +1,10 @@
 ## Hi there 👋
 
+## Projects
+
+- [LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE) — A regime-switching / Mixture-of-Experts extension of LightGBM
+- [MokuMoku Town](https://mokumoku.town/en/) — A virtual office in your browser. Loosely connected, deeply focused.
+
 ## OSS Contributions
 
 - [lightgbm-org/LightGBM#7247](https://github.com/lightgbm-org/LightGBM/pull/7247) — Add [LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE) (mixture-of-experts extension) to the external repositories list
