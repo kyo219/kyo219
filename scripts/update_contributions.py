@@ -6,8 +6,8 @@ and rewrites the marker-delimited block in README.md:
   <!-- OSS-CONTRIB:START --> ... <!-- OSS-CONTRIB:END -->
 
 Each repository is rendered as a shields.io badge followed by its PRs.
-A repository gets a green "contributor" badge once at least one PR is
-merged, and a blue "PR under review" badge while only open PRs exist.
+The badge shows PR counts ("2 merged · 1 open") and is green once at
+least one PR is merged, blue while only open PRs exist.
 Closed-unmerged PRs are omitted.
 
 Only the GitHub REST API and the Python standard library are used, so the
@@ -23,6 +23,10 @@ import urllib.request
 USER = "kyo219"
 README = os.path.join(os.path.dirname(__file__), "..", "README.md")
 API = "https://api.github.com"
+BADGE_STYLE = "for-the-badge"
+# simple-icons slug per repo name; neither LightGBM nor numpyro has one yet
+LOGO_OVERRIDES = {}
+DEFAULT_LOGO = "github"
 
 
 def api_get(path, params=None):
@@ -90,13 +94,20 @@ def build_contributions():
         prs_url = f"https://github.com/{full}/pulls?q=" + urllib.parse.quote(
             f"is:pr author:{USER}"
         )
-        if any(p["merged"] for p in prs):
-            status, color = "contributor", "brightgreen"
-        else:
-            status, color = "PR under review", "blue"
+        n_merged = sum(p["merged"] for p in prs)
+        n_open = len(prs) - n_merged
+        counts = []
+        if n_merged:
+            counts.append(f"{n_merged} merged")
+        if n_open:
+            counts.append(f"{n_open} open")
+        status = " · ".join(counts)
+        color = "brightgreen" if n_merged else "blue"
+        logo = LOGO_OVERRIDES.get(name, DEFAULT_LOGO)
         lines = [
             f"[![{name}](https://img.shields.io/badge/"
-            f"{badge_label(name)}-{badge_label(status)}-{color}?logo=github)]"
+            f"{badge_label(name)}-{badge_label(status)}-{color}"
+            f"?style={BADGE_STYLE}&logo={logo}&logoColor=white)]"
             f"({prs_url})"
         ]
         for p in prs:
