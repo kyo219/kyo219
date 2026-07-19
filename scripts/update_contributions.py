@@ -1,12 +1,14 @@
-"""Regenerate the auto-managed OSS-contribution badges in README.md.
+"""Regenerate the auto-managed OSS-contributions section in README.md.
 
 Searches public PRs authored by USER, groups them by external repository,
 and rewrites the marker-delimited block in README.md:
 
-  <!-- OSS-BADGES:START --> ... <!-- OSS-BADGES:END -->
+  <!-- OSS-CONTRIB:START --> ... <!-- OSS-CONTRIB:END -->
 
+Each repository is rendered as a shields.io badge followed by its PRs.
 A repository gets a green "contributor" badge once at least one PR is
 merged, and a blue "PR under review" badge while only open PRs exist.
+Closed-unmerged PRs are omitted.
 
 Only the GitHub REST API and the Python standard library are used, so the
 script runs as-is inside GitHub Actions with the default GITHUB_TOKEN.
@@ -59,7 +61,7 @@ def badge_label(text):
     return urllib.parse.quote(text.replace("-", "--").replace("_", "__"))
 
 
-def build_badges():
+def build_contributions():
     repos = {}
     for pr in fetch_prs():
         full = re.sub(r".*/repos/", "", pr["repository_url"])
@@ -67,30 +69,41 @@ def build_badges():
         if owner.lower() == USER.lower():
             continue
         merged = pr.get("pull_request", {}).get("merged_at") is not None
-        is_open = pr["state"] == "open"
-        entry = repos.setdefault(full, {"merged": 0, "open": 0})
-        entry["merged"] += merged
-        entry["open"] += is_open
+        if not (merged or pr["state"] == "open"):
+            continue  # closed without merge
+        repos.setdefault(full, []).append(
+            {
+                "number": pr["number"],
+                "title": pr["title"],
+                "url": pr["html_url"],
+                "merged": merged,
+            }
+        )
 
-    badges = []
-    for full in sorted(repos, key=lambda r: (-repos[r]["merged"], r)):
-        counts = repos[full]
-        if not (counts["merged"] or counts["open"]):
-            continue
+    blocks = []
+    ranked = sorted(
+        repos, key=lambda r: (-sum(p["merged"] for p in repos[r]), r)
+    )
+    for full in ranked:
+        prs = sorted(repos[full], key=lambda p: -p["number"])
         name = full.split("/")[1]
         prs_url = f"https://github.com/{full}/pulls?q=" + urllib.parse.quote(
             f"is:pr author:{USER}"
         )
-        if counts["merged"]:
+        if any(p["merged"] for p in prs):
             status, color = "contributor", "brightgreen"
         else:
             status, color = "PR under review", "blue"
-        badges.append(
+        lines = [
             f"[![{name}](https://img.shields.io/badge/"
             f"{badge_label(name)}-{badge_label(status)}-{color}?logo=github)]"
             f"({prs_url})"
-        )
-    return "\n".join(badges)
+        ]
+        for p in prs:
+            suffix = "" if p["merged"] else " _(under review)_"
+            lines.append(f"- [#{p['number']}]({p['url']}) — {p['title']}{suffix}")
+        blocks.append("\n".join(lines))
+    return "\n\n".join(blocks)
 
 
 def replace_block(text, marker, content):
@@ -100,13 +113,13 @@ def replace_block(text, marker, content):
 
 
 def main():
-    badges = build_badges()
+    contributions = build_contributions()
     with open(README, encoding="utf-8") as f:
         text = f.read()
-    text = replace_block(text, "OSS-BADGES", badges)
+    text = replace_block(text, "OSS-CONTRIB", contributions)
     with open(README, "w", encoding="utf-8") as f:
         f.write(text)
-    print(badges)
+    print(contributions)
 
 
 if __name__ == "__main__":
