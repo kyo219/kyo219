@@ -1,10 +1,12 @@
-"""Regenerate the auto-managed OSS-contribution sections of README.md.
+"""Regenerate the auto-managed OSS-contribution badges in README.md.
 
 Searches public PRs authored by USER, groups them by external repository,
-and rewrites the marker-delimited blocks in README.md:
+and rewrites the marker-delimited block in README.md:
 
   <!-- OSS-BADGES:START --> ... <!-- OSS-BADGES:END -->
-  <!-- OSS-TABLE:START -->  ... <!-- OSS-TABLE:END -->
+
+A repository gets a green "contributor" badge once at least one PR is
+merged, and a blue "PR under review" badge while only open PRs exist.
 
 Only the GitHub REST API and the Python standard library are used, so the
 script runs as-is inside GitHub Actions with the default GITHUB_TOKEN.
@@ -57,7 +59,7 @@ def badge_label(text):
     return urllib.parse.quote(text.replace("-", "--").replace("_", "__"))
 
 
-def build_sections():
+def build_badges():
     repos = {}
     for pr in fetch_prs():
         full = re.sub(r".*/repos/", "", pr["repository_url"])
@@ -70,15 +72,12 @@ def build_sections():
         entry["merged"] += merged
         entry["open"] += is_open
 
-    # drop repos where nothing was merged and nothing is in flight
-    repos = {k: v for k, v in repos.items() if v["merged"] or v["open"]}
-    stars = {full: api_get(f"/repos/{full}")["stargazers_count"] for full in repos}
-    ranked = sorted(repos, key=lambda r: (-stars[r], r))
-
-    badges, rows = [], []
-    for full in ranked:
-        name = full.split("/")[1]
+    badges = []
+    for full in sorted(repos, key=lambda r: (-repos[r]["merged"], r)):
         counts = repos[full]
+        if not (counts["merged"] or counts["open"]):
+            continue
+        name = full.split("/")[1]
         prs_url = f"https://github.com/{full}/pulls?q=" + urllib.parse.quote(
             f"is:pr author:{USER}"
         )
@@ -91,17 +90,7 @@ def build_sections():
             f"{badge_label(name)}-{badge_label(status)}-{color}?logo=github)]"
             f"({prs_url})"
         )
-        rows.append(
-            f"| [{full}](https://github.com/{full}) | ⭐ {stars[full]:,} "
-            f"| {counts['merged']} | {counts['open']} |"
-        )
-
-    table = [
-        "| Repository | Stars | Merged PRs | Open PRs |",
-        "| --- | --- | --- | --- |",
-        *rows,
-    ]
-    return "\n".join(badges), "\n".join(table)
+    return "\n".join(badges)
 
 
 def replace_block(text, marker, content):
@@ -111,14 +100,13 @@ def replace_block(text, marker, content):
 
 
 def main():
-    badges, table = build_sections()
+    badges = build_badges()
     with open(README, encoding="utf-8") as f:
         text = f.read()
     text = replace_block(text, "OSS-BADGES", badges)
-    text = replace_block(text, "OSS-TABLE", table)
     with open(README, "w", encoding="utf-8") as f:
         f.write(text)
-    print(badges, table, sep="\n\n")
+    print(badges)
 
 
 if __name__ == "__main__":

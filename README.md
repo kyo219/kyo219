@@ -20,15 +20,6 @@ Building ML tools and cozy virtual spaces.
 
 ## 🌱 OSS Contributions
 
-<!-- OSS-TABLE:START -->
-| Repository | Stars | Merged PRs | Open PRs |
-| --- | --- | --- | --- |
-| [lightgbm-org/LightGBM](https://github.com/lightgbm-org/LightGBM) | ⭐ 18,577 | 1 | 1 |
-| [pyro-ppl/numpyro](https://github.com/pyro-ppl/numpyro) | ⭐ 2,720 | 0 | 1 |
-<!-- OSS-TABLE:END -->
-
-**Highlights**
-
 - [lightgbm-org/LightGBM#7247](https://github.com/lightgbm-org/LightGBM/pull/7247) — Add [LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE) to the external repositories list
 - [lightgbm-org/LightGBM#7246](https://github.com/lightgbm-org/LightGBM/pull/7246) — Add int8 input dtype support for pre-discretized features (C++ / Python package)
 - [pyro-ppl/numpyro#2222](https://github.com/pyro-ppl/numpyro/pull/2222) — Avoid unnecessary deepcopy in `random_*_module` and `promote_batch_shape` (~3× faster eager `promote_batch_shape`, peak memory reduced by the size of the NN parameters)
