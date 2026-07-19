@@ -13,10 +13,11 @@ Building ML tools and cozy virtual spaces.
 
 ## 🛠️ Projects
 
-|  |  |
-| --- | --- |
-| **[MokuMoku Town](https://mokumoku.town/en/)** | A virtual office in your browser. Loosely connected, deeply focused. |
-| **[LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE)** | A regime-switching / Mixture-of-Experts extension of LightGBM. |
+**[MokuMoku Town](https://mokumoku.town/en/)** 🏙️<br>
+A virtual office in your browser. _Loosely connected, deeply focused._
+
+**[LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE)** 🌲<br>
+A regime-switching / Mixture-of-Experts extension of LightGBM.
 
 ## 🌱 OSS Contributions
 
