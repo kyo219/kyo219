@@ -6,8 +6,9 @@ and rewrites the marker-delimited block in README.md:
   <!-- OSS-CONTRIB:START --> ... <!-- OSS-CONTRIB:END -->
 
 Each repository is rendered as a shields.io badge followed by its PRs.
-The badge shows PR counts ("2 merged · 1 open") and is green once at
-least one PR is merged, blue while only open PRs exist.
+The badge label includes the repo's star count ("LightGBM (⭐ 17.2k)"),
+the message shows PR counts ("2 merged · 1 open"), and the color is
+green once at least one PR is merged, blue while only open PRs exist.
 Closed-unmerged PRs are omitted.
 
 Only the GitHub REST API and the Python standard library are used, so the
@@ -65,6 +66,19 @@ def badge_label(text):
     return urllib.parse.quote(text.replace("-", "--").replace("_", "__"))
 
 
+def fetch_stars(full):
+    """Star count of a repository, e.g. 17234."""
+    return api_get(f"/repos/{full}")["stargazers_count"]
+
+
+def format_stars(count):
+    """Compact star count: 987 -> '987', 17234 -> '17.2k'."""
+    if count < 1000:
+        return str(count)
+    compact = f"{count / 1000:.1f}".rstrip("0").rstrip(".")
+    return f"{compact}k"
+
+
 def build_contributions():
     repos = {}
     for pr in fetch_prs():
@@ -104,9 +118,10 @@ def build_contributions():
         status = " · ".join(counts)
         color = "brightgreen" if n_merged else "blue"
         logo = LOGO_OVERRIDES.get(name, DEFAULT_LOGO)
+        label = f"{name} (⭐ {format_stars(fetch_stars(full))})"
         lines = [
             f"[![{name}](https://img.shields.io/badge/"
-            f"{badge_label(name)}-{badge_label(status)}-{color}"
+            f"{badge_label(label)}-{badge_label(status)}-{color}"
             f"?style={BADGE_STYLE}&logo={logo}&logoColor=white)]"
             f"({prs_url})"
         ]
