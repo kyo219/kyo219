@@ -28,6 +28,19 @@ BADGE_STYLE = "for-the-badge"
 # simple-icons slug per repo name; neither LightGBM nor numpyro has one yet
 LOGO_OVERRIDES = {}
 DEFAULT_LOGO = "github"
+# Hand-written impact notes keyed by "owner/repo#number". PR titles are
+# fetched from GitHub, so anything not in the title (benchmarks, context)
+# must live here to survive regeneration.
+NOTES = {
+    "pyro-ppl/numpyro#2222": (
+        "~3× faster eager `promote_batch_shape`, peak memory reduced "
+        "by the size of the NN parameters"
+    ),
+    "lightgbm-org/LightGBM#7247": (
+        "links my [LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE) "
+        "extension from the official docs"
+    ),
+}
 
 
 def api_get(path, params=None):
@@ -126,8 +139,13 @@ def build_contributions():
             f"({prs_url})"
         ]
         for p in prs:
-            suffix = "" if p["merged"] else " _(under review)_"
-            lines.append(f"- [#{p['number']}]({p['url']}) — {p['title']}{suffix}")
+            line = f"- [#{p['number']}]({p['url']}) — {p['title']}"
+            note = NOTES.get(f"{full}#{p['number']}")
+            if note:
+                line += f" _({note})_"
+            if not p["merged"]:
+                line += " _(under review)_"
+            lines.append(line)
         blocks.append("\n".join(lines))
     return "\n\n".join(blocks)
 
