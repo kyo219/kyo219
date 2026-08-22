@@ -28,18 +28,58 @@ BADGE_STYLE = "for-the-badge"
 # simple-icons slug per repo name; neither LightGBM nor numpyro has one yet
 LOGO_OVERRIDES = {}
 DEFAULT_LOGO = "github"
-# Hand-written impact notes keyed by "owner/repo#number". PR titles are
-# fetched from GitHub, so anything not in the title (benchmarks, context)
-# must live here to survive regeneration.
-NOTES = {
-    "pyro-ppl/numpyro#2222": (
-        "~3× faster eager `promote_batch_shape`, peak memory reduced "
-        "by the size of the NN parameters"
-    ),
-    "lightgbm-org/LightGBM#7247": (
-        "links my [LightGBM-MoE](https://github.com/kyo219/LightGBM-MoE) "
-        "extension from the official docs"
-    ),
+# Hand-written per-PR copy keyed by "owner/repo#number". The block is
+# regenerated from GitHub PR titles, so richer copy must live here to
+# survive. Fields (all optional):
+#   title   — replaces the fetched PR title, rendered in bold
+#   summary — sub-bullet describing what the change does
+#   why     — sub-bullet rendered as "**Why it matters:** ..."
+OVERRIDES = {
+    "lightgbm-org/LightGBM#7247": {
+        "title": "Added LightGBM-MoE to the official external repositories list",
+        "summary": (
+            "Documented a C++-native Mixture-of-Experts extension that "
+            "combines specialized GBDTs through a learned gating function."
+        ),
+        "why": (
+            "It makes regime-aware gradient boosting easier to discover for "
+            "problems where one global model struggles with heterogeneous "
+            "data, such as changing market conditions or distinct user "
+            "segments."
+        ),
+    },
+    "lightgbm-org/LightGBM#7246": {
+        "title": "Added native `int8` input support for pre-discretized features",
+        "summary": (
+            "Eliminates the intermediate `float32` copy at the Python–C++ "
+            "boundary, reducing feature-matrix memory usage by up to 75% "
+            "while preserving identical predictions."
+        ),
+        "why": (
+            "Large, low-cardinality datasets can be passed to LightGBM "
+            "without temporarily quadrupling their memory footprint, making "
+            "training and inference more practical in memory-constrained "
+            "environments."
+        ),
+    },
+    "pyro-ppl/numpyro#2222": {
+        "title": (
+            "Removed unnecessary deep copies in module sampling and "
+            "batch-shape promotion"
+        ),
+        "summary": (
+            "Replaced full parameter and distribution copies with "
+            "structure-only or shallow copies, substantially lowering peak "
+            "memory usage and making eager batch-shape promotion about 3× "
+            "faster on large arrays."
+        ),
+        "why": (
+            "Bayesian inference with large neural networks and distributions "
+            "can avoid duplicating gigabytes of unchanged parameters, "
+            "reducing out-of-memory failures and improving eager-execution "
+            "performance without changing model behavior."
+        ),
+    },
 }
 
 
@@ -138,15 +178,22 @@ def build_contributions():
             f"?style={BADGE_STYLE}&logo={logo}&logoColor=white)]"
             f"({prs_url})"
         ]
+        entries = []
         for p in prs:
-            line = f"- [#{p['number']}]({p['url']}) — {p['title']}"
-            note = NOTES.get(f"{full}#{p['number']}")
-            if note:
-                line += f" _({note})_"
+            o = OVERRIDES.get(f"{full}#{p['number']}", {})
+            title = f"**{o['title']}**" if "title" in o else p["title"]
+            entry = [f"- [#{p['number']}]({p['url']}) — {title}"]
             if not p["merged"]:
-                line += " _(under review)_"
-            lines.append(line)
-        blocks.append("\n".join(lines))
+                entry[0] += " _(under review)_"
+            if o.get("summary"):
+                entry.append(f"  - {o['summary']}")
+            if o.get("why"):
+                entry.append(f"  - **Why it matters:** {o['why']}")
+            entries.append("\n".join(entry))
+        # blank line between multi-line entries so sub-bullets read cleanly
+        sep = "\n\n" if any("\n" in e for e in entries) else "\n"
+        lines.append(sep.join(entries))
+        blocks.append("\n\n".join(lines) if sep == "\n\n" else "\n".join(lines))
     return "\n\n".join(blocks)
 
 
