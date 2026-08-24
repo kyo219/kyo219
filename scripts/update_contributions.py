@@ -5,11 +5,11 @@ and rewrites the marker-delimited block in README.md:
 
   <!-- OSS-CONTRIB:START --> ... <!-- OSS-CONTRIB:END -->
 
-Each repository is rendered as a shields.io badge followed by its PRs.
-The badge label includes the repo's star count ("LightGBM (⭐ 17.2k)"),
-the message shows PR counts ("2 merged · 1 open"), and the color is
-green once at least one PR is merged, blue while only open PRs exist.
-Closed-unmerged PRs are omitted.
+Each repository is rendered as a shields.io badge followed by a one-line
+entry per PR. The badge label includes the repo's star count
+("LightGBM (⭐ 17.2k)"), the message shows PR counts ("2 merged · 1 open"),
+and the color is green once at least one PR is merged, blue while only
+open PRs exist. Closed-unmerged PRs are omitted.
 
 Only the GitHub REST API and the Python standard library are used, so the
 script runs as-is inside GitHub Actions with the default GITHUB_TOKEN.
@@ -28,58 +28,20 @@ BADGE_STYLE = "for-the-badge"
 # simple-icons slug per repo name; neither LightGBM nor numpyro has one yet
 LOGO_OVERRIDES = {}
 DEFAULT_LOGO = "github"
-# Hand-written per-PR copy keyed by "owner/repo#number". The block is
-# regenerated from GitHub PR titles, so richer copy must live here to
-# survive. Fields (all optional):
-#   title   — replaces the fetched PR title, rendered in bold
-#   summary — sub-bullet describing what the change does
-#   why     — sub-bullet rendered as "**Why it matters:** ..."
-OVERRIDES = {
-    "lightgbm-org/LightGBM#7247": {
-        "title": "Added LightGBM-MoE to the official external repositories list",
-        "summary": (
-            "Documented a C++-native Mixture-of-Experts extension that "
-            "combines specialized GBDTs through a learned gating function."
-        ),
-        "why": (
-            "It makes regime-aware gradient boosting easier to discover for "
-            "problems where one global model struggles with heterogeneous "
-            "data, such as changing market conditions or distinct user "
-            "segments."
-        ),
-    },
-    "lightgbm-org/LightGBM#7246": {
-        "title": "Added native `int8` input support for pre-discretized features",
-        "summary": (
-            "Eliminates the intermediate `float32` copy at the Python–C++ "
-            "boundary, reducing feature-matrix memory usage by up to 75% "
-            "while preserving identical predictions."
-        ),
-        "why": (
-            "Large, low-cardinality datasets can be passed to LightGBM "
-            "without temporarily quadrupling their memory footprint, making "
-            "training and inference more practical in memory-constrained "
-            "environments."
-        ),
-    },
-    "pyro-ppl/numpyro#2222": {
-        "title": (
-            "Removed unnecessary deep copies in module sampling and "
-            "batch-shape promotion"
-        ),
-        "summary": (
-            "Replaced full parameter and distribution copies with "
-            "structure-only or shallow copies, substantially lowering peak "
-            "memory usage and making eager batch-shape promotion about 3× "
-            "faster on large arrays."
-        ),
-        "why": (
-            "Bayesian inference with large neural networks and distributions "
-            "can avoid duplicating gigabytes of unchanged parameters, "
-            "reducing out-of-memory failures and improving eager-execution "
-            "performance without changing model behavior."
-        ),
-    },
+# Hand-written PR titles keyed by "owner/repo#number". The block is
+# regenerated from GitHub PR titles, so rewritten titles must live here
+# to survive. They replace the fetched title and render in bold.
+TITLE_OVERRIDES = {
+    "lightgbm-org/LightGBM#7247": (
+        "Added LightGBM-MoE to the official external repositories list"
+    ),
+    "lightgbm-org/LightGBM#7246": (
+        "Added native `int8` input support for pre-discretized features"
+    ),
+    "pyro-ppl/numpyro#2222": (
+        "Removed unnecessary deep copies in module sampling and "
+        "batch-shape promotion"
+    ),
 }
 
 
@@ -180,20 +142,14 @@ def build_contributions():
         ]
         entries = []
         for p in prs:
-            o = OVERRIDES.get(f"{full}#{p['number']}", {})
-            title = f"**{o['title']}**" if "title" in o else p["title"]
-            entry = [f"- [#{p['number']}]({p['url']}) — {title}"]
+            override = TITLE_OVERRIDES.get(f"{full}#{p['number']}")
+            title = f"**{override}**" if override else p["title"]
+            entry = f"- [#{p['number']}]({p['url']}) — {title}"
             if not p["merged"]:
-                entry[0] += " _(under review)_"
-            if o.get("summary"):
-                entry.append(f"  - {o['summary']}")
-            if o.get("why"):
-                entry.append(f"  - **Why it matters:** {o['why']}")
-            entries.append("\n".join(entry))
-        # blank line between multi-line entries so sub-bullets read cleanly
-        sep = "\n\n" if any("\n" in e for e in entries) else "\n"
-        lines.append(sep.join(entries))
-        blocks.append("\n\n".join(lines) if sep == "\n\n" else "\n".join(lines))
+                entry += " _(under review)_"
+            entries.append(entry)
+        lines.append("\n".join(entries))
+        blocks.append("\n".join(lines))
     return "\n\n".join(blocks)
 
 
