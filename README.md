@@ -17,7 +17,7 @@ A regime-switching / Mixture-of-Experts extension of LightGBM.
 ## 🌱 OSS Contributions
 
 <!-- OSS-CONTRIB:START -->
-[![numpyro](https://img.shields.io/badge/numpyro%20%28%E2%AD%90%202.7k%29-5%20merged-brightgreen?style=for-the-badge&logo=github&logoColor=white)](https://github.com/pyro-ppl/numpyro/pulls?q=is%3Apr%20author%3Akyo219)
+[![numpyro](https://img.shields.io/badge/numpyro%20%28%E2%AD%90%202.8k%29-5%20merged-brightgreen?style=for-the-badge&logo=github&logoColor=white)](https://github.com/pyro-ppl/numpyro/pulls?q=is%3Apr%20author%3Akyo219)
 - [#2251](https://github.com/pyro-ppl/numpyro/pull/2251) — Speed up posterior diagnostics (summary 1.7x, effective_sample_size 2.1x)
 - [#2250](https://github.com/pyro-ppl/numpyro/pull/2250) — Drop the masked logsumexp reduction in mixture `log_prob`
 - [#2248](https://github.com/pyro-ppl/numpyro/pull/2248) — Fix generator being appended instead of a list in scan `carry_shapes`
