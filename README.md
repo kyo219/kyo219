@@ -4,6 +4,8 @@
 
 Building ML tools and cozy virtual spaces.
 
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kyosuke-higuchi-a941121b8/)
+
 </div>
 
 ## 🛠️ Projects
