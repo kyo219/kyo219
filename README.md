@@ -3,7 +3,6 @@
 # Hi, I'm mokumoku(kyo219) 👋
 
 [![Role](https://img.shields.io/badge/Role-Data%20Scientist%20%2F%20Analyst-blue?style=for-the-badge)](https://www.linkedin.com/in/kyosuke-higuchi-a941121b8/)
-[![Open to Work](https://img.shields.io/badge/Status-Open%20to%20Work-brightgreen?style=for-the-badge)](https://www.linkedin.com/in/kyosuke-higuchi-a941121b8/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kyosuke-higuchi-a941121b8/)
 
 </div>
