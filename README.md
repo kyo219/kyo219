@@ -23,7 +23,7 @@ A regime-switching / Mixture-of-Experts extension of LightGBM.
 - [#2320](https://github.com/pyro-ppl/numpyro/pull/2320) — perf(util): avoid double allocation of the fori_collect collection
 - [#2319](https://github.com/pyro-ppl/numpyro/pull/2319) — perf(infer): avoid keeping two copies of single-chain MCMC samples _(under review)_
 - [#2318](https://github.com/pyro-ppl/numpyro/pull/2318) — Skip the zero-width pad in soft_vmap
-- [#2317](https://github.com/pyro-ppl/numpyro/pull/2317) — Avoid per-step host sync from the diagnostics string in the MCMC progress-bar loop _(under review)_
+- [#2317](https://github.com/pyro-ppl/numpyro/pull/2317) — perf(util): avoid per-step host sync from the diagnostics string in the MCMC progress-bar loop _(under review)_
 - [#2251](https://github.com/pyro-ppl/numpyro/pull/2251) — Speed up posterior diagnostics (summary 1.7x, effective_sample_size 2.1x)
 - [#2250](https://github.com/pyro-ppl/numpyro/pull/2250) — Drop the masked logsumexp reduction in mixture `log_prob`
 - [#2248](https://github.com/pyro-ppl/numpyro/pull/2248) — Fix generator being appended instead of a list in scan `carry_shapes`
