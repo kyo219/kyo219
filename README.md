@@ -30,7 +30,7 @@ A regime-switching / Mixture-of-Experts extension of LightGBM.
 - [#2247](https://github.com/pyro-ppl/numpyro/pull/2247) — Avoid per-step host sync in the SVI progress-bar loop
 - [#2222](https://github.com/pyro-ppl/numpyro/pull/2222) — **Removed unnecessary deep copies in module sampling and batch-shape promotion**
 
-[![LightGBM](https://img.shields.io/badge/LightGBM%20%28%E2%AD%90%2018.8k%29-1%20merged%20%C2%B7%203%20open-brightgreen?style=for-the-badge&logo=github&logoColor=white)](https://github.com/lightgbm-org/LightGBM/pulls?q=is%3Apr%20author%3Akyo219)
+[![LightGBM](https://img.shields.io/badge/LightGBM%20%28%E2%AD%90%2018.9k%29-1%20merged%20%C2%B7%203%20open-brightgreen?style=for-the-badge&logo=github&logoColor=white)](https://github.com/lightgbm-org/LightGBM/pulls?q=is%3Apr%20author%3Akyo219)
 - [#7483](https://github.com/lightgbm-org/LightGBM/pull/7483) — [c++] avoid copying per-row contribution maps in sparse prediction output _(under review)_
 - [#7482](https://github.com/lightgbm-org/LightGBM/pull/7482) — [python-package] keep float32 feature matrix when pandas categorical columns contain missing values _(under review)_
 - [#7247](https://github.com/lightgbm-org/LightGBM/pull/7247) — **Added LightGBM-MoE to the official external repositories list**
