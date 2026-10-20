@@ -35,4 +35,9 @@ A regime-switching / Mixture-of-Experts extension of LightGBM.
 - [#7482](https://github.com/lightgbm-org/LightGBM/pull/7482) — [python-package] keep float32 feature matrix when pandas categorical columns contain missing values _(under review)_
 - [#7247](https://github.com/lightgbm-org/LightGBM/pull/7247) — **Added LightGBM-MoE to the official external repositories list**
 - [#7246](https://github.com/lightgbm-org/LightGBM/pull/7246) — **Added native `int8` input support for pre-discretized features** _(under review)_
+
+[![Turing.jl](https://img.shields.io/badge/Turing.jl%20%28%E2%AD%90%202.3k%29-3%20open-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/TuringLang/Turing.jl/pulls?q=is%3Apr%20author%3Akyo219)
+- [#2908](https://github.com/TuringLang/Turing.jl/pull/2908) — Store Gibbs component variable names as tuples _(under review)_
+- [#2907](https://github.com/TuringLang/Turing.jl/pull/2907) — Compare Gibbs block layouts in linear time _(under review)_
+- [#2906](https://github.com/TuringLang/Turing.jl/pull/2906) — Fix biased ESS posteriors: centre proposals on the joint prior mean _(under review)_
 <!-- OSS-CONTRIB:END -->
